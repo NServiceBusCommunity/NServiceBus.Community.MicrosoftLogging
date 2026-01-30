@@ -2,7 +2,6 @@
 using System.ServiceProcess;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
-using NServiceBus;
 using NServiceBus.Logging;
 
 #region MsLoggingInService
@@ -15,7 +14,7 @@ class ProgramService :
     ServiceBase
 {
     IEndpointInstance? endpointInstance;
-    Microsoft.Extensions.Logging.ILoggerFactory? loggerFactory;
+    MsLoggerFactory? loggerFactory;
 
     static void Main()
     {

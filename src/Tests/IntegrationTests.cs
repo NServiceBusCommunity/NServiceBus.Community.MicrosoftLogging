@@ -1,6 +1,5 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using NServiceBus;
 using NServiceBus.Logging;
 using Microsoft.Extensions.Logging;
 
@@ -17,7 +16,7 @@ public class IntegrationTests
 
         var configuration = new EndpointConfiguration("Tests");
         configuration.UseTransport<LearningTransport>();
-
+        configuration.UseSerialization<SystemJsonSerializer>();
         var endpoint = await Endpoint.Start(configuration);
 
         var message = new MyMessage
@@ -40,14 +39,26 @@ public class IntegrationTests
 
     static async Task RunWithHost(bool deferLogging)
     {
+        // Note: NServiceBus.Extensions.Hosting automatically integrates with
+        // Microsoft.Extensions.Logging, so UseMicrosoftLogFactoryLogging is not needed.
+        // The deferLogging parameter is kept for API compatibility but is handled
+        // automatically by the hosting package.
+        _ = deferLogging; // Suppress unused parameter warning
+
         var builder = Host.CreateDefaultBuilder();
         var logMessageCapture = new LogMessageCapture();
-        builder.ConfigureLogging(logging => { logging.AddProvider(logMessageCapture); });
-        builder.UseMicrosoftLogFactoryLogging(deferLogging);
+        builder.ConfigureLogging(logging =>
+        {
+            // Clear default providers (including EventLog on Windows) to prevent
+            // disposed logger issues when running tests sequentially
+            logging.ClearProviders();
+            logging.AddProvider(logMessageCapture);
+        });
         builder.UseNServiceBus(_ =>
         {
             var configuration = new EndpointConfiguration("HostingTest");
             configuration.UseTransport<LearningTransport>();
+            configuration.UseSerialization<SystemJsonSerializer>();
             return configuration;
         });
 
