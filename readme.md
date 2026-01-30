@@ -101,6 +101,7 @@ using MsLogLevel = Microsoft.Extensions.Logging.LogLevel;
 using MsLoggerFactory = Microsoft.Extensions.Logging.ILoggerFactory;
 
 [DesignerCategory("Code")]
+[SupportedOSPlatform("windows")]
 class ProgramService :
     ServiceBase
 {
@@ -156,7 +157,7 @@ class ProgramService :
     }
 }
 ```
-<sup><a href='/src/Tests/Snippets/ProgramService.cs#L7-L67' title='Snippet source file'>snippet source</a> | <a href='#snippet-MsLoggingInService' title='Start of snippet'>anchor</a></sup>
+<sup><a href='/src/Tests/Snippets/ProgramService.cs#L8-L69' title='Snippet source file'>snippet source</a> | <a href='#snippet-MsLoggingInService' title='Start of snippet'>anchor</a></sup>
 <!-- endSnippet -->
 
 

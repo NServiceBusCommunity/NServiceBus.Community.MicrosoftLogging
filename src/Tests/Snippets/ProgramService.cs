@@ -1,4 +1,5 @@
-﻿using System.ComponentModel;
+using System.ComponentModel;
+using System.Runtime.Versioning;
 using System.ServiceProcess;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
@@ -10,6 +11,7 @@ using MsLogLevel = Microsoft.Extensions.Logging.LogLevel;
 using MsLoggerFactory = Microsoft.Extensions.Logging.ILoggerFactory;
 
 [DesignerCategory("Code")]
+[SupportedOSPlatform("windows")]
 class ProgramService :
     ServiceBase
 {

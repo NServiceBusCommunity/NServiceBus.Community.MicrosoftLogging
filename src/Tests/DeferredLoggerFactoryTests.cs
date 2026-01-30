@@ -123,26 +123,16 @@ public class DeferredLoggerFactoryTests
 /// <summary>
 /// Test implementation of DeferredLoggerFactory that mirrors the production code.
 /// </summary>
-class TestDeferredLoggerFactory : NServiceBus.Logging.ILoggerFactory
+class TestDeferredLoggerFactory(LogLevel level) :
+    ILoggerFactory
 {
-    LogLevel level;
-    bool isDebugEnabled;
-    bool isInfoEnabled;
-    bool isWarnEnabled;
-    bool isErrorEnabled;
-    bool isFatalEnabled;
+    bool isDebugEnabled = LogLevel.Debug >= level;
+    bool isInfoEnabled = LogLevel.Info >= level;
+    bool isWarnEnabled = LogLevel.Warn >= level;
+    bool isErrorEnabled = LogLevel.Error >= level;
+    bool isFatalEnabled = LogLevel.Fatal >= level;
 
     public ConcurrentDictionary<string, ConcurrentQueue<(LogLevel level, string message)>> DeferredLogs { get; } = [];
-
-    public TestDeferredLoggerFactory(LogLevel level)
-    {
-        this.level = level;
-        isDebugEnabled = LogLevel.Debug >= level;
-        isInfoEnabled = LogLevel.Info >= level;
-        isWarnEnabled = LogLevel.Warn >= level;
-        isErrorEnabled = LogLevel.Error >= level;
-        isFatalEnabled = LogLevel.Fatal >= level;
-    }
 
     public ILog GetLogger(Type type) =>
         GetLogger(type.FullName!);
@@ -171,65 +161,57 @@ class TestDeferredLoggerFactory : NServiceBus.Logging.ILoggerFactory
 /// <summary>
 /// Test implementation of NamedLogger that mirrors the production code.
 /// </summary>
-class TestNamedLogger : ILog
+class TestNamedLogger(string name, TestDeferredLoggerFactory factory) :
+    ILog
 {
-    string name;
-    TestDeferredLoggerFactory factory;
-
-    public TestNamedLogger(string name, TestDeferredLoggerFactory factory)
-    {
-        this.name = name;
-        this.factory = factory;
-    }
-
     public bool IsDebugEnabled { get; internal set; }
     public bool IsInfoEnabled { get; internal set; }
     public bool IsWarnEnabled { get; internal set; }
     public bool IsErrorEnabled { get; internal set; }
     public bool IsFatalEnabled { get; internal set; }
 
-    public void Debug(string message) =>
-        factory.Write(name, LogLevel.Debug, message);
+    public void Debug(string? message) =>
+        factory.Write(name, LogLevel.Debug, message ?? "");
 
-    public void Debug(string message, Exception exception) =>
-        factory.Write(name, LogLevel.Debug, message + Environment.NewLine + exception);
+    public void Debug(string? message, Exception? exception) =>
+        factory.Write(name, LogLevel.Debug, (message ?? "") + Environment.NewLine + exception);
 
-    public void DebugFormat(string format, params object[] args) =>
+    public void DebugFormat(string format, params object?[] args) =>
         factory.Write(name, LogLevel.Debug, string.Format(format, args));
 
-    public void Info(string message) =>
-        factory.Write(name, LogLevel.Info, message);
+    public void Info(string? message) =>
+        factory.Write(name, LogLevel.Info, message ?? "");
 
-    public void Info(string message, Exception exception) =>
-        factory.Write(name, LogLevel.Info, message + Environment.NewLine + exception);
+    public void Info(string? message, Exception? exception) =>
+        factory.Write(name, LogLevel.Info, (message ?? "") + Environment.NewLine + exception);
 
-    public void InfoFormat(string format, params object[] args) =>
+    public void InfoFormat(string format, params object?[] args) =>
         factory.Write(name, LogLevel.Info, string.Format(format, args));
 
-    public void Warn(string message) =>
-        factory.Write(name, LogLevel.Warn, message);
+    public void Warn(string? message) =>
+        factory.Write(name, LogLevel.Warn, message ?? "");
 
-    public void Warn(string message, Exception exception) =>
-        factory.Write(name, LogLevel.Warn, message + Environment.NewLine + exception);
+    public void Warn(string? message, Exception? exception) =>
+        factory.Write(name, LogLevel.Warn, (message ?? "") + Environment.NewLine + exception);
 
-    public void WarnFormat(string format, params object[] args) =>
+    public void WarnFormat(string format, params object?[] args) =>
         factory.Write(name, LogLevel.Warn, string.Format(format, args));
 
-    public void Error(string message) =>
-        factory.Write(name, LogLevel.Error, message);
+    public void Error(string? message) =>
+        factory.Write(name, LogLevel.Error, message ?? "");
 
-    public void Error(string message, Exception exception) =>
-        factory.Write(name, LogLevel.Error, message + Environment.NewLine + exception);
+    public void Error(string? message, Exception? exception) =>
+        factory.Write(name, LogLevel.Error, (message ?? "") + Environment.NewLine + exception);
 
-    public void ErrorFormat(string format, params object[] args) =>
+    public void ErrorFormat(string format, params object?[] args) =>
         factory.Write(name, LogLevel.Error, string.Format(format, args));
 
-    public void Fatal(string message) =>
-        factory.Write(name, LogLevel.Fatal, message);
+    public void Fatal(string? message) =>
+        factory.Write(name, LogLevel.Fatal, message ?? "");
 
-    public void Fatal(string message, Exception exception) =>
-        factory.Write(name, LogLevel.Fatal, message + Environment.NewLine + exception);
+    public void Fatal(string? message, Exception? exception) =>
+        factory.Write(name, LogLevel.Fatal, (message ?? "") + Environment.NewLine + exception);
 
-    public void FatalFormat(string format, params object[] args) =>
+    public void FatalFormat(string format, params object?[] args) =>
         factory.Write(name, LogLevel.Fatal, string.Format(format, args));
 }

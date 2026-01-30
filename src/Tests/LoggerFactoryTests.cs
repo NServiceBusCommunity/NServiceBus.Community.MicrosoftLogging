@@ -1,4 +1,3 @@
-using Microsoft.Extensions.Logging;
 using NServiceBus.Logging;
 
 /// <summary>
@@ -43,7 +42,7 @@ public class LoggerFactoryTests
         factory.UseMsFactory(mockFactory);
 
         var loggerFactory = GetLoggingFactory(factory);
-        var log = loggerFactory.GetLogger(typeof(LoggerFactoryTests));
+        loggerFactory.GetLogger(typeof(LoggerFactoryTests));
 
         Assert.Single(mockFactory.Loggers);
         Assert.True(mockFactory.Loggers.ContainsKey(typeof(LoggerFactoryTests).FullName!));
@@ -57,7 +56,7 @@ public class LoggerFactoryTests
         factory.UseMsFactory(mockFactory);
 
         var loggerFactory = GetLoggingFactory(factory);
-        var log = loggerFactory.GetLogger("MyCustomLogger");
+        loggerFactory.GetLogger("MyCustomLogger");
 
         Assert.Single(mockFactory.Loggers);
         Assert.True(mockFactory.Loggers.ContainsKey("MyCustomLogger"));
@@ -117,25 +116,25 @@ public class LoggerFactoryTests
         factory.UseMsFactory(mockFactory);
 
         var loggerFactory = GetLoggingFactory(factory);
-        var log1 = loggerFactory.GetLogger(typeof(LoggerFactoryTests));
-        var log2 = loggerFactory.GetLogger(typeof(string));
+        loggerFactory.GetLogger(typeof(LoggerFactoryTests));
+        loggerFactory.GetLogger(typeof(string));
 
         Assert.Equal(2, mockFactory.Loggers.Count);
     }
 
     // Helper to invoke protected GetLoggingFactory method
-    static NServiceBus.Logging.ILoggerFactory GetLoggingFactory(MicrosoftLogFactory factory)
+    static ILoggerFactory GetLoggingFactory(MicrosoftLogFactory factory)
     {
         var method = typeof(MicrosoftLogFactory).GetMethod(
             "GetLoggingFactory",
-            System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Instance);
+            BindingFlags.NonPublic | BindingFlags.Instance);
         try
         {
-            return (NServiceBus.Logging.ILoggerFactory)method!.Invoke(factory, null)!;
+            return (ILoggerFactory)method!.Invoke(factory, null)!;
         }
-        catch (System.Reflection.TargetInvocationException ex)
+        catch (TargetInvocationException exception)
         {
-            throw ex.InnerException!;
+            throw exception.InnerException!;
         }
     }
 }

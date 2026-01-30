@@ -1,6 +1,3 @@
-using Microsoft.Extensions.Logging;
-using NServiceBus.Logging;
-
 public class MicrosoftLogFactoryTests
 {
     [Fact]
@@ -73,14 +70,14 @@ public class MicrosoftLogFactoryTests
     {
         var method = typeof(MicrosoftLogFactory).GetMethod(
             "GetLoggingFactory",
-            System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Instance);
+            BindingFlags.NonPublic | BindingFlags.Instance);
         try
         {
             return (NServiceBus.Logging.ILoggerFactory)method!.Invoke(factory, null)!;
         }
-        catch (System.Reflection.TargetInvocationException ex)
+        catch (TargetInvocationException exception)
         {
-            throw ex.InnerException!;
+            throw exception.InnerException!;
         }
     }
 }
