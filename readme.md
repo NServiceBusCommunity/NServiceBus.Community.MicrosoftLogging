@@ -63,7 +63,7 @@ var logFactory = LogManager.Use<MicrosoftLogFactory>();
 logFactory.UseMsFactory(loggerFactory);
 // endpoint startup and shutdown
 ```
-<sup><a href='/src/Tests/Snippets/Usage.cs#L11-L24' title='Snippet source file'>snippet source</a> | <a href='#snippet-MsLoggingInCode' title='Start of snippet'>anchor</a></sup>
+<sup><a href='/src/Tests/Snippets/Usage.cs#L10-L23' title='Snippet source file'>snippet source</a> | <a href='#snippet-MsLoggingInCode' title='Start of snippet'>anchor</a></sup>
 <!-- endSnippet -->
 
 
@@ -105,7 +105,7 @@ class ProgramService :
     ServiceBase
 {
     IEndpointInstance? endpointInstance;
-    Microsoft.Extensions.Logging.ILoggerFactory? loggerFactory;
+    MsLoggerFactory? loggerFactory;
 
     static void Main()
     {
@@ -156,7 +156,7 @@ class ProgramService :
     }
 }
 ```
-<sup><a href='/src/Tests/Snippets/ProgramService.cs#L8-L68' title='Snippet source file'>snippet source</a> | <a href='#snippet-MsLoggingInService' title='Start of snippet'>anchor</a></sup>
+<sup><a href='/src/Tests/Snippets/ProgramService.cs#L7-L67' title='Snippet source file'>snippet source</a> | <a href='#snippet-MsLoggingInService' title='Start of snippet'>anchor</a></sup>
 <!-- endSnippet -->
 
 
