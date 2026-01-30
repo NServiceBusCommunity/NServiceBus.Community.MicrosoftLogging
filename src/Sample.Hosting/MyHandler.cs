@@ -1,7 +1,4 @@
-﻿using NServiceBus;
-using NServiceBus.Logging;
-
-class MyHandler :
+﻿class MyHandler :
     IHandleMessages<MyMessage>
 {
     static ILog log = LogManager.GetLogger<MyHandler>();

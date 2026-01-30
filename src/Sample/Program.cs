@@ -1,6 +1,5 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
-using NServiceBus;
 using NServiceBus.Logging;
 
 public static class Program

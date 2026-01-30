@@ -1,5 +1,4 @@
-﻿using NServiceBus;
-using Microsoft.Extensions.Logging;
+﻿using Microsoft.Extensions.Logging;
 using NServiceBus.Logging;
 using Microsoft.Extensions.DependencyInjection;
 using MsLogLevel = Microsoft.Extensions.Logging.LogLevel;

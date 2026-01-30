@@ -45,9 +45,6 @@ class NServiceBusLoggingHostedService(MsLoggerFactory factory) :
         return Task.CompletedTask;
     }
 
-    public Task StopAsync(Cancel cancel)
-    {
-        factory.Dispose();
-        return Task.CompletedTask;
-    }
+    public Task StopAsync(Cancel cancel) =>
+        Task.CompletedTask;
 }
