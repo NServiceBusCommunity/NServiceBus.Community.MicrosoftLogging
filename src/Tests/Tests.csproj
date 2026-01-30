@@ -11,8 +11,8 @@
     <PackageReference Include="xunit.runner.visualstudio" Version="3.1.5" PrivateAssets="all" />
     <PackageReference Include="MarkdownSnippets.MsBuild" Version="28.0.0-beta.25" PrivateAssets="all" />
     <PackageReference Include="Microsoft.NET.Test.Sdk" Version="18.0.1" />
-    <ProjectReference Include="..\NServiceBus.MicrosoftLogging.Hosting\NServiceBus.MicrosoftLogging.Hosting.csproj" />
-    <ProjectReference Include="..\NServiceBus.MicrosoftLogging\NServiceBus.MicrosoftLogging.csproj" />
+    <ProjectReference Include="..\NServiceBus.Community.MicrosoftLogging.Hosting\NServiceBus.Community.MicrosoftLogging.Hosting.csproj" />
+    <ProjectReference Include="..\NServiceBus.Community.MicrosoftLogging\NServiceBus.Community.MicrosoftLogging.csproj" />
     <PackageReference Include="Microsoft.Extensions.Logging.Console" Version="10.0.2" />
     <PackageReference Include="Microsoft.Extensions.Logging" Version="10.0.2" />
     <PackageReference Include="Microsoft.Extensions.Logging.Abstractions" Version="10.0.2" />

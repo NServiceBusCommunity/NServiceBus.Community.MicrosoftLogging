@@ -2,11 +2,11 @@
 <Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
     <TargetFramework>net10.0</TargetFramework>
+    <RootNamespace>NServiceBus.MicrosoftLogging</RootNamespace>
   </PropertyGroup>
   <ItemGroup>
     <PackageReference Include="NServiceBus" Version="10.0.0" />
-    <PackageReference Include="Microsoft.Extensions.Hosting.Abstractions" Version="10.0.2" />
+    <PackageReference Include="Microsoft.Extensions.Logging.Abstractions" Version="10.0.2" />
     <PackageReference Include="ProjectDefaults" Version="1.0.170" PrivateAssets="all" />
-    <ProjectReference Include="..\NServiceBus.MicrosoftLogging\NServiceBus.MicrosoftLogging.csproj" />
   </ItemGroup>
 </Project>

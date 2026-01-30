@@ -5,7 +5,7 @@
     <OutputType>Exe</OutputType>
   </PropertyGroup>
   <ItemGroup>
-    <ProjectReference Include="..\NServiceBus.MicrosoftLogging.Hosting\NServiceBus.MicrosoftLogging.Hosting.csproj" />
+    <ProjectReference Include="..\NServiceBus.Community.MicrosoftLogging.Hosting\NServiceBus.Community.MicrosoftLogging.Hosting.csproj" />
     <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="10.0.2" />
     <PackageReference Include="Microsoft.Extensions.Logging" Version="10.0.2" />
     <PackageReference Include="Microsoft.Extensions.Hosting" Version="10.0.2" />

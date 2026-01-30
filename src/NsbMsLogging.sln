@@ -2,7 +2,7 @@
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.29201.188
 MinimumVisualStudioVersion = 16.0.29201.188
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NServiceBus.MicrosoftLogging", "NServiceBus.MicrosoftLogging\NServiceBus.MicrosoftLogging.csproj", "{8D87D482-BC30-49F6-946C-73DD62FC4EC0}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NServiceBus.Community.MicrosoftLogging", "NServiceBus.Community.MicrosoftLogging\NServiceBus.Community.MicrosoftLogging.csproj", "{8D87D482-BC30-49F6-946C-73DD62FC4EC0}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Tests", "Tests\Tests.csproj", "{49CBE4DA-DFE0-4320-A82A-8BC11FCBA14D}"
 EndProject
@@ -17,7 +17,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 		global.json = global.json
 	EndProjectSection
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NServiceBus.MicrosoftLogging.Hosting", "NServiceBus.MicrosoftLogging.Hosting\NServiceBus.MicrosoftLogging.Hosting.csproj", "{17F6502A-A481-4820-B2C7-08875D12929B}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NServiceBus.Community.MicrosoftLogging.Hosting", "NServiceBus.Community.MicrosoftLogging.Hosting\NServiceBus.Community.MicrosoftLogging.Hosting.csproj", "{17F6502A-A481-4820-B2C7-08875D12929B}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Sample.Hosting", "Sample.Hosting\Sample.Hosting.csproj", "{54FCCD32-01CA-41A0-9F46-5EE1751D2ED5}"
 EndProject
