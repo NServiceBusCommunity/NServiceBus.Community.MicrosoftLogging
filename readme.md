@@ -5,10 +5,10 @@ Source File: /readme.source.md
 To change this file edit the source file and then run MarkdownSnippets.
 -->
 
-# <img src="/src/icon.png" height="30px"> NServiceBus.MicrosoftLogging
+# <img src="/src/icon.png" height="30px"> NServiceBus.Community.MicrosoftLogging
 
-[![Build status](https://ci.appveyor.com/api/projects/status/sovlo1pvgfh0xnba/branch/main?svg=true)](https://ci.appveyor.com/project/SimonCropp/nservicebus-MicrosoftLogging)
-[![NuGet Status](https://img.shields.io/nuget/v/NServiceBus.MicrosoftLogging.svg)](https://www.nuget.org/packages/NServiceBus.MicrosoftLogging/)
+[![Build status](https://img.shields.io/appveyor/build/SimonCropp/nservicebus-community-MicrosoftLogging)](https://ci.appveyor.com/project/SimonCropp/nservicebus-community-MicrosoftLogging)
+[![NuGet Status](https://img.shields.io/nuget/v/NServiceBus.Community.MicrosoftLogging.svg)](https://www.nuget.org/packages/NServiceBus.Community.MicrosoftLogging/)
 
 Add support for [NServiceBus](https://particular.net/nservicebus) to log to [Microsoft.Extensions.Logging](https://github.com/aspnet/Logging).
 
@@ -21,19 +21,19 @@ Add support for [NServiceBus](https://particular.net/nservicebus) to log to [Mic
 
 ## Community backed
 
-**It is expected that all developers either [become a Patron](https://opencollective.com/nservicebusextensions/contribute/patron-6976) to use NServiceBusExtensions. [Go to licensing FAQ](https://github.com/NServiceBusExtensions/Home/#licensingpatron-faq)**
+**It is expected that all developers [become a Patron](https://opencollective.com/nservicebuscommunity/contribute/patron-6976) to use NServiceBus Community Extensions. [Go to licensing FAQ](https://github.com/NServiceBusCommunity/Home/#licensingpatron-faq)**
 
 
 ### Sponsors
 
-Support this project by [becoming a Sponsor](https://opencollective.com/nservicebusextensions/contribute/sponsor-6972). The company avatar will show up here with a website link. The avatar will also be added to all GitHub repositories under the [NServiceBusExtensions organization](https://github.com/NServiceBusExtensions).
+Support this project by [becoming a Sponsor](https://opencollective.com/nservicebuscommunity/contribute/sponsor-6972). The company avatar will show up here with a website link. The avatar will also be added to all GitHub repositories under the [NServiceBusCommunity organization](https://github.com/NServiceBusCommunity).
 
 
 ### Patrons
 
-Thanks to all the backing developers. Support this project by [becoming a patron](https://opencollective.com/nservicebusextensions/contribute/patron-6976).
+Thanks to all the backing developers. Support this project by [becoming a patron](https://opencollective.com/nservicebuscommunity/contribute/patron-6976).
 
-<img src="https://opencollective.com/nservicebusextensions/tiers/patron.svg?width=890&avatarHeight=60&button=false">
+<img src="https://opencollective.com/nservicebuscommunity/tiers/patron.svg?width=890&avatarHeight=60&button=false">
 
 <a href="#" id="endofbacking"></a>
 
@@ -42,14 +42,14 @@ Thanks to all the backing developers. Support this project by [becoming a patron
 
 ## NuGet package
 
-https://nuget.org/packages/NServiceBus.MicrosoftLogging/
-https://nuget.org/packages/NServiceBus.MicrosoftLogging.Hosting
+https://nuget.org/packages/NServiceBus.Community.MicrosoftLogging/
+https://nuget.org/packages/NServiceBus.Community.MicrosoftLogging.Hosting
 
 
 ## Usage
 
 <!-- snippet: MsLoggingInCode -->
-<a id='snippet-msloggingincode'></a>
+<a id='snippet-MsLoggingInCode'></a>
 ```cs
 var serviceCollection = new ServiceCollection();
 serviceCollection.AddLogging(loggingBuilder =>
@@ -63,7 +63,7 @@ var logFactory = LogManager.Use<MicrosoftLogFactory>();
 logFactory.UseMsFactory(loggerFactory);
 // endpoint startup and shutdown
 ```
-<sup><a href='/src/Tests/Snippets/Usage.cs#L11-L24' title='Snippet source file'>snippet source</a> | <a href='#snippet-msloggingincode' title='Start of snippet'>anchor</a></sup>
+<sup><a href='/src/Tests/Snippets/Usage.cs#L11-L24' title='Snippet source file'>snippet source</a> | <a href='#snippet-MsLoggingInCode' title='Start of snippet'>anchor</a></sup>
 <!-- endSnippet -->
 
 
@@ -77,14 +77,14 @@ As `LoggerFactory` implements [IDisposable](https://msdn.microsoft.com/en-us/lib
 Disposing the `LoggerFactory` is done by the underlying infrastructure.
 
 <!-- snippet: MsLoggingInGenericHost -->
-<a id='snippet-msloggingingenerichost'></a>
+<a id='snippet-MsLoggingInGenericHost'></a>
 ```cs
 var builder = Host.CreateDefaultBuilder();
 builder.ConfigureLogging(logging => { logging.AddConsole(); });
 // should go before any other Use or Configure method that uses NServiceBus
 builder.UseMicrosoftLogFactoryLogging();
 ```
-<sup><a href='/src/Tests/Snippets/GenericHostUsage.cs#L8-L15' title='Snippet source file'>snippet source</a> | <a href='#snippet-msloggingingenerichost' title='Start of snippet'>anchor</a></sup>
+<sup><a href='/src/Tests/Snippets/GenericHostUsage.cs#L8-L15' title='Snippet source file'>snippet source</a> | <a href='#snippet-MsLoggingInGenericHost' title='Start of snippet'>anchor</a></sup>
 <!-- endSnippet -->
 
 Note: `UseMicrosoftLogFactoryLogger` requires adding `NServiceBus.MicrosoftLogging.Hosting` as a package dependency.
@@ -95,7 +95,7 @@ Note: `UseMicrosoftLogFactoryLogger` requires adding `NServiceBus.MicrosoftLoggi
 When [hosting in a windows service](https://docs.particular.net/nservicebus/hosting/windows-service) `LoggerFactory` should be disposed of as part of the [ServiceBase.OnStop](https://msdn.microsoft.com/en-us/library/system.serviceprocess.servicebase.onstop.aspx) execution.
 
 <!-- snippet: MsLoggingInService -->
-<a id='snippet-mslogginginservice'></a>
+<a id='snippet-MsLoggingInService'></a>
 ```cs
 using MsLogLevel = Microsoft.Extensions.Logging.LogLevel;
 using MsLoggerFactory = Microsoft.Extensions.Logging.ILoggerFactory;
@@ -156,7 +156,7 @@ class ProgramService :
     }
 }
 ```
-<sup><a href='/src/Tests/Snippets/ProgramService.cs#L8-L68' title='Snippet source file'>snippet source</a> | <a href='#snippet-mslogginginservice' title='Start of snippet'>anchor</a></sup>
+<sup><a href='/src/Tests/Snippets/ProgramService.cs#L8-L68' title='Snippet source file'>snippet source</a> | <a href='#snippet-MsLoggingInService' title='Start of snippet'>anchor</a></sup>
 <!-- endSnippet -->
 
 
