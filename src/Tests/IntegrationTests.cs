@@ -17,16 +17,17 @@ public class IntegrationTests
         var configuration = new EndpointConfiguration("Tests");
         configuration.UseTransport<LearningTransport>();
         configuration.UseSerialization<SystemJsonSerializer>();
-        var endpoint = await Endpoint.Start(configuration);
+        var cancel = TestContext.Current.CancellationToken;
+        var endpoint = await Endpoint.Start(configuration, cancel);
 
         var message = new MyMessage
         {
             DateSend = DateTime.Now,
         };
-        await endpoint.SendLocal(message);
-        await Task.Delay(500);
+        await endpoint.SendLocal(message, cancellationToken: cancel);
+        await Task.Delay(500, cancel);
         Assert.NotEmpty(LogMessageCapture.LoggingEvents);
-        await endpoint.Stop();
+        await endpoint.Stop(cancel);
     }
 
     [Fact]
