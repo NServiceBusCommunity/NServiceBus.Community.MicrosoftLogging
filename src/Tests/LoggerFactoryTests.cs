@@ -1,12 +1,13 @@
 using NServiceBus.Logging;
+using System.Threading.Tasks;
 
 /// <summary>
 /// Tests for the LoggerFactory class through the public MicrosoftLogFactory API.
 /// </summary>
 public class LoggerFactoryTests
 {
-    [Fact]
-    public void GetLogger_with_type_returns_ILog_implementation()
+    [Test]
+    public async Task GetLogger_with_type_returns_ILog_implementation()
     {
         var mockFactory = new MockMsLoggerFactory();
         var factory = new MicrosoftLogFactory();
@@ -16,12 +17,12 @@ public class LoggerFactoryTests
         var loggerFactory = GetLoggingFactory(factory);
         var log = loggerFactory.GetLogger(typeof(LoggerFactoryTests));
 
-        Assert.NotNull(log);
-        Assert.IsAssignableFrom<ILog>(log);
+        await Assert.That(log).IsNotNull();
+        await Assert.That(log).IsAssignableTo<ILog>();
     }
 
-    [Fact]
-    public void GetLogger_with_string_returns_ILog_implementation()
+    [Test]
+    public async Task GetLogger_with_string_returns_ILog_implementation()
     {
         var mockFactory = new MockMsLoggerFactory();
         var factory = new MicrosoftLogFactory();
@@ -30,12 +31,12 @@ public class LoggerFactoryTests
         var loggerFactory = GetLoggingFactory(factory);
         var log = loggerFactory.GetLogger("MyCustomLogger");
 
-        Assert.NotNull(log);
-        Assert.IsAssignableFrom<ILog>(log);
+        await Assert.That(log).IsNotNull();
+        await Assert.That(log).IsAssignableTo<ILog>();
     }
 
-    [Fact]
-    public void GetLogger_with_type_creates_logger_with_type_name()
+    [Test]
+    public async Task GetLogger_with_type_creates_logger_with_type_name()
     {
         var mockFactory = new MockMsLoggerFactory();
         var factory = new MicrosoftLogFactory();
@@ -44,12 +45,12 @@ public class LoggerFactoryTests
         var loggerFactory = GetLoggingFactory(factory);
         loggerFactory.GetLogger(typeof(LoggerFactoryTests));
 
-        Assert.Single(mockFactory.Loggers);
-        Assert.True(mockFactory.Loggers.ContainsKey(typeof(LoggerFactoryTests).FullName!));
+        await Assert.That(mockFactory.Loggers).HasSingleItem();
+        await Assert.That(mockFactory.Loggers.ContainsKey(typeof(LoggerFactoryTests).FullName!)).IsTrue();
     }
 
-    [Fact]
-    public void GetLogger_with_string_creates_logger_with_given_name()
+    [Test]
+    public async Task GetLogger_with_string_creates_logger_with_given_name()
     {
         var mockFactory = new MockMsLoggerFactory();
         var factory = new MicrosoftLogFactory();
@@ -58,12 +59,12 @@ public class LoggerFactoryTests
         var loggerFactory = GetLoggingFactory(factory);
         loggerFactory.GetLogger("MyCustomLogger");
 
-        Assert.Single(mockFactory.Loggers);
-        Assert.True(mockFactory.Loggers.ContainsKey("MyCustomLogger"));
+        await Assert.That(mockFactory.Loggers).HasSingleItem();
+        await Assert.That(mockFactory.Loggers.ContainsKey("MyCustomLogger")).IsTrue();
     }
 
-    [Fact]
-    public void GetLogger_with_type_logs_to_correct_logger()
+    [Test]
+    public async Task GetLogger_with_type_logs_to_correct_logger()
     {
         var mockFactory = new MockMsLoggerFactory();
         var factory = new MicrosoftLogFactory();
@@ -74,12 +75,12 @@ public class LoggerFactoryTests
         log.Info("test message");
 
         var mockLogger = mockFactory.Loggers[typeof(LoggerFactoryTests).FullName!];
-        Assert.Single(mockLogger.LogEntries);
-        Assert.Equal("test message", mockLogger.LogEntries[0].Message);
+        await Assert.That(mockLogger.LogEntries).HasSingleItem();
+        await Assert.That(mockLogger.LogEntries[0].Message).IsEqualTo("test message");
     }
 
-    [Fact]
-    public void GetLogger_with_string_logs_to_correct_logger()
+    [Test]
+    public async Task GetLogger_with_string_logs_to_correct_logger()
     {
         var mockFactory = new MockMsLoggerFactory();
         var factory = new MicrosoftLogFactory();
@@ -90,12 +91,12 @@ public class LoggerFactoryTests
         log.Warn("warning message");
 
         var mockLogger = mockFactory.Loggers["CustomLogger"];
-        Assert.Single(mockLogger.LogEntries);
-        Assert.Equal("warning message", mockLogger.LogEntries[0].Message);
+        await Assert.That(mockLogger.LogEntries).HasSingleItem();
+        await Assert.That(mockLogger.LogEntries[0].Message).IsEqualTo("warning message");
     }
 
-    [Fact]
-    public void GetLogger_called_multiple_times_with_same_type_returns_separate_wrapper_instances()
+    [Test]
+    public async Task GetLogger_called_multiple_times_with_same_type_returns_separate_wrapper_instances()
     {
         var mockFactory = new MockMsLoggerFactory();
         var factory = new MicrosoftLogFactory();
@@ -105,11 +106,11 @@ public class LoggerFactoryTests
         var log1 = loggerFactory.GetLogger(typeof(LoggerFactoryTests));
         var log2 = loggerFactory.GetLogger(typeof(LoggerFactoryTests));
 
-        Assert.NotSame(log1, log2);
+        await Assert.That(log2).IsNotSameReferenceAs(log1);
     }
 
-    [Fact]
-    public void GetLogger_called_multiple_times_with_different_types_creates_different_loggers()
+    [Test]
+    public async Task GetLogger_called_multiple_times_with_different_types_creates_different_loggers()
     {
         var mockFactory = new MockMsLoggerFactory();
         var factory = new MicrosoftLogFactory();
@@ -119,7 +120,7 @@ public class LoggerFactoryTests
         loggerFactory.GetLogger(typeof(LoggerFactoryTests));
         loggerFactory.GetLogger(typeof(string));
 
-        Assert.Equal(2, mockFactory.Loggers.Count);
+        await Assert.That(mockFactory.Loggers.Count).IsEqualTo(2);
     }
 
     // Helper to invoke protected GetLoggingFactory method

@@ -2,10 +2,11 @@
 using Microsoft.Extensions.Hosting;
 using NServiceBus.Logging;
 using Microsoft.Extensions.Logging;
+using System.Threading.Tasks;
 
 public class IntegrationTests
 {
-    [Fact]
+    [Test]
     public async Task Ensure_log_messages_are_redirected()
     {
         var msLoggerFactory = new LoggerFactory();
@@ -26,15 +27,15 @@ public class IntegrationTests
         };
         await endpoint.SendLocal(message, cancellationToken: cancel);
         await Task.Delay(500, cancel);
-        Assert.NotEmpty(LogMessageCapture.LoggingEvents);
+        await Assert.That(LogMessageCapture.LoggingEvents).IsNotEmpty();
         await endpoint.Stop(cancel);
     }
 
-    [Fact]
+    [Test]
     public Task Ensure_log_messages_are_redirected_in_Hosting_deferred() =>
         RunWithHost(true);
 
-    [Fact]
+    [Test]
     public Task Ensure_log_messages_are_redirected_in_Hosting_not_deferred() =>
         RunWithHost(false);
 
@@ -74,7 +75,7 @@ public class IntegrationTests
         await messageSession.SendLocal(message);
         await Task.Delay(500);
 
-        Assert.NotEmpty(LogMessageCapture.LoggingEvents);
+        await Assert.That(LogMessageCapture.LoggingEvents).IsNotEmpty();
         await host.StopAsync();
     }
 

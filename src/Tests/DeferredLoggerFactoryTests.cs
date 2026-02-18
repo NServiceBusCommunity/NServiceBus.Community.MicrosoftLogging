@@ -1,4 +1,5 @@
 using NServiceBus.Logging;
+using System.Threading.Tasks;
 
 /// <summary>
 /// Tests for the DeferredLoggerFactory pattern using a local test implementation.
@@ -6,56 +7,56 @@ using NServiceBus.Logging;
 /// </summary>
 public class DeferredLoggerFactoryTests
 {
-    [Fact]
-    public void GetLogger_with_type_returns_NamedLogger()
+    [Test]
+    public async Task GetLogger_with_type_returns_NamedLogger()
     {
         var factory = new TestDeferredLoggerFactory(LogLevel.Debug);
 
         var log = factory.GetLogger(typeof(DeferredLoggerFactoryTests));
 
-        Assert.NotNull(log);
-        Assert.IsType<TestNamedLogger>(log);
+        await Assert.That(log).IsNotNull();
+        await Assert.That(log).IsTypeOf<TestNamedLogger>();
     }
 
-    [Fact]
-    public void GetLogger_with_string_returns_NamedLogger()
+    [Test]
+    public async Task GetLogger_with_string_returns_NamedLogger()
     {
         var factory = new TestDeferredLoggerFactory(LogLevel.Debug);
 
         var log = factory.GetLogger("TestLogger");
 
-        Assert.NotNull(log);
-        Assert.IsType<TestNamedLogger>(log);
+        await Assert.That(log).IsNotNull();
+        await Assert.That(log).IsTypeOf<TestNamedLogger>();
     }
 
-    [Fact]
-    public void Write_adds_message_to_deferred_logs()
+    [Test]
+    public async Task Write_adds_message_to_deferred_logs()
     {
         var factory = new TestDeferredLoggerFactory(LogLevel.Debug);
 
         factory.Write("TestLogger", LogLevel.Info, "test message");
 
-        Assert.Single(factory.DeferredLogs);
-        Assert.True(factory.DeferredLogs.ContainsKey("TestLogger"));
-        Assert.Single(factory.DeferredLogs["TestLogger"]);
+        await Assert.That(factory.DeferredLogs).HasSingleItem();
+        await Assert.That(factory.DeferredLogs.ContainsKey("TestLogger")).IsTrue();
+        await Assert.That(factory.DeferredLogs["TestLogger"]).HasSingleItem();
         var (level, message) = factory.DeferredLogs["TestLogger"].First();
-        Assert.Equal(LogLevel.Info, level);
-        Assert.Equal("test message", message);
+        await Assert.That(level).IsEqualTo(LogLevel.Info);
+        await Assert.That(message).IsEqualTo("test message");
     }
 
-    [Fact]
-    public void Write_filters_messages_below_configured_level()
+    [Test]
+    public async Task Write_filters_messages_below_configured_level()
     {
         var factory = new TestDeferredLoggerFactory(LogLevel.Warn);
 
         factory.Write("TestLogger", LogLevel.Debug, "debug message");
         factory.Write("TestLogger", LogLevel.Info, "info message");
 
-        Assert.Empty(factory.DeferredLogs);
+        await Assert.That(factory.DeferredLogs).IsEmpty();
     }
 
-    [Fact]
-    public void Write_accepts_messages_at_or_above_configured_level()
+    [Test]
+    public async Task Write_accepts_messages_at_or_above_configured_level()
     {
         var factory = new TestDeferredLoggerFactory(LogLevel.Warn);
 
@@ -63,12 +64,12 @@ public class DeferredLoggerFactoryTests
         factory.Write("TestLogger", LogLevel.Error, "error message");
         factory.Write("TestLogger", LogLevel.Fatal, "fatal message");
 
-        Assert.Single(factory.DeferredLogs);
-        Assert.Equal(3, factory.DeferredLogs["TestLogger"].Count);
+        await Assert.That(factory.DeferredLogs).HasSingleItem();
+        await Assert.That(factory.DeferredLogs["TestLogger"].Count).IsEqualTo(3);
     }
 
-    [Fact]
-    public void Write_groups_messages_by_logger_name()
+    [Test]
+    public async Task Write_groups_messages_by_logger_name()
     {
         var factory = new TestDeferredLoggerFactory(LogLevel.Debug);
 
@@ -76,18 +77,18 @@ public class DeferredLoggerFactoryTests
         factory.Write("Logger2", LogLevel.Info, "message 2");
         factory.Write("Logger1", LogLevel.Info, "message 3");
 
-        Assert.Equal(2, factory.DeferredLogs.Count);
-        Assert.Equal(2, factory.DeferredLogs["Logger1"].Count);
-        Assert.Single(factory.DeferredLogs["Logger2"]);
+        await Assert.That(factory.DeferredLogs.Count).IsEqualTo(2);
+        await Assert.That(factory.DeferredLogs["Logger1"].Count).IsEqualTo(2);
+        await Assert.That(factory.DeferredLogs["Logger2"]).HasSingleItem();
     }
 
-    [Theory]
-    [InlineData(LogLevel.Debug, true, true, true, true, true)]
-    [InlineData(LogLevel.Info, false, true, true, true, true)]
-    [InlineData(LogLevel.Warn, false, false, true, true, true)]
-    [InlineData(LogLevel.Error, false, false, false, true, true)]
-    [InlineData(LogLevel.Fatal, false, false, false, false, true)]
-    public void GetLogger_sets_enabled_levels_correctly(
+    [Test]
+    [Arguments(LogLevel.Debug, true, true, true, true, true)]
+    [Arguments(LogLevel.Info, false, true, true, true, true)]
+    [Arguments(LogLevel.Warn, false, false, true, true, true)]
+    [Arguments(LogLevel.Error, false, false, false, true, true)]
+    [Arguments(LogLevel.Fatal, false, false, false, false, true)]
+    public async Task GetLogger_sets_enabled_levels_correctly(
         LogLevel configuredLevel,
         bool expectedDebug,
         bool expectedInfo,
@@ -99,15 +100,15 @@ public class DeferredLoggerFactoryTests
 
         var log = factory.GetLogger("TestLogger");
 
-        Assert.Equal(expectedDebug, log.IsDebugEnabled);
-        Assert.Equal(expectedInfo, log.IsInfoEnabled);
-        Assert.Equal(expectedWarn, log.IsWarnEnabled);
-        Assert.Equal(expectedError, log.IsErrorEnabled);
-        Assert.Equal(expectedFatal, log.IsFatalEnabled);
+        await Assert.That(log.IsDebugEnabled).IsEqualTo(expectedDebug);
+        await Assert.That(log.IsInfoEnabled).IsEqualTo(expectedInfo);
+        await Assert.That(log.IsWarnEnabled).IsEqualTo(expectedWarn);
+        await Assert.That(log.IsErrorEnabled).IsEqualTo(expectedError);
+        await Assert.That(log.IsFatalEnabled).IsEqualTo(expectedFatal);
     }
 
-    [Fact]
-    public void Logger_writes_through_factory()
+    [Test]
+    public async Task Logger_writes_through_factory()
     {
         var factory = new TestDeferredLoggerFactory(LogLevel.Debug);
         var logger = factory.GetLogger("TestLogger");
@@ -115,8 +116,8 @@ public class DeferredLoggerFactoryTests
         logger.Info("test info message");
         logger.Error("test error message");
 
-        Assert.Single(factory.DeferredLogs);
-        Assert.Equal(2, factory.DeferredLogs["TestLogger"].Count);
+        await Assert.That(factory.DeferredLogs).HasSingleItem();
+        await Assert.That(factory.DeferredLogs["TestLogger"].Count).IsEqualTo(2);
     }
 }
 

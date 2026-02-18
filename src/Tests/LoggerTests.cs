@@ -1,6 +1,7 @@
 using Microsoft.Extensions.Logging;
 using NServiceBus.Logging;
 using MsLogLevel = Microsoft.Extensions.Logging.LogLevel;
+using System.Threading.Tasks;
 
 /// <summary>
 /// Tests for the Logger class that wraps Microsoft.Extensions.Logging.ILogger.
@@ -9,21 +10,21 @@ using MsLogLevel = Microsoft.Extensions.Logging.LogLevel;
 /// </summary>
 public class LoggerTests
 {
-    [Fact]
-    public void Debug_logs_message_at_debug_level()
+    [Test]
+    public async Task Debug_logs_message_at_debug_level()
     {
         var mockLogger = new MockMsLogger();
         var logger = new TestLogger(mockLogger);
 
         logger.Debug("test debug message");
 
-        Assert.Single(mockLogger.LogEntries);
-        Assert.Equal(MsLogLevel.Debug, mockLogger.LogEntries[0].Level);
-        Assert.Equal("test debug message", mockLogger.LogEntries[0].Message);
+        await Assert.That(mockLogger.LogEntries).HasSingleItem();
+        await Assert.That(mockLogger.LogEntries[0].Level).IsEqualTo(MsLogLevel.Debug);
+        await Assert.That(mockLogger.LogEntries[0].Message).IsEqualTo("test debug message");
     }
 
-    [Fact]
-    public void Debug_with_exception_logs_at_debug_level()
+    [Test]
+    public async Task Debug_with_exception_logs_at_debug_level()
     {
         var mockLogger = new MockMsLogger();
         var logger = new TestLogger(mockLogger);
@@ -31,41 +32,41 @@ public class LoggerTests
 
         logger.Debug("test debug message", exception);
 
-        Assert.Single(mockLogger.LogEntries);
-        Assert.Equal(MsLogLevel.Debug, mockLogger.LogEntries[0].Level);
-        Assert.Equal("test debug message", mockLogger.LogEntries[0].Message);
-        Assert.Same(exception, mockLogger.LogEntries[0].Exception);
+        await Assert.That(mockLogger.LogEntries).HasSingleItem();
+        await Assert.That(mockLogger.LogEntries[0].Level).IsEqualTo(MsLogLevel.Debug);
+        await Assert.That(mockLogger.LogEntries[0].Message).IsEqualTo("test debug message");
+        await Assert.That(mockLogger.LogEntries[0].Exception).IsSameReferenceAs(exception);
     }
 
-    [Fact]
-    public void DebugFormat_formats_message()
+    [Test]
+    public async Task DebugFormat_formats_message()
     {
         var mockLogger = new MockMsLogger();
         var logger = new TestLogger(mockLogger);
 
         logger.DebugFormat("value is {0}", 42);
 
-        Assert.Single(mockLogger.LogEntries);
-        Assert.Equal(MsLogLevel.Debug, mockLogger.LogEntries[0].Level);
-        Assert.Equal("value is {0}", mockLogger.LogEntries[0].Message);
-        Assert.Equal([42], mockLogger.LogEntries[0].Args);
+        await Assert.That(mockLogger.LogEntries).HasSingleItem();
+        await Assert.That(mockLogger.LogEntries[0].Level).IsEqualTo(MsLogLevel.Debug);
+        await Assert.That(mockLogger.LogEntries[0].Message).IsEqualTo("value is {0}");
+        await Assert.That(mockLogger.LogEntries[0].Args).IsEqualTo([42]);
     }
 
-    [Fact]
-    public void Info_logs_message_at_information_level()
+    [Test]
+    public async Task Info_logs_message_at_information_level()
     {
         var mockLogger = new MockMsLogger();
         var logger = new TestLogger(mockLogger);
 
         logger.Info("test info message");
 
-        Assert.Single(mockLogger.LogEntries);
-        Assert.Equal(MsLogLevel.Information, mockLogger.LogEntries[0].Level);
-        Assert.Equal("test info message", mockLogger.LogEntries[0].Message);
+        await Assert.That(mockLogger.LogEntries).HasSingleItem();
+        await Assert.That(mockLogger.LogEntries[0].Level).IsEqualTo(MsLogLevel.Information);
+        await Assert.That(mockLogger.LogEntries[0].Message).IsEqualTo("test info message");
     }
 
-    [Fact]
-    public void Info_with_exception_logs_at_information_level()
+    [Test]
+    public async Task Info_with_exception_logs_at_information_level()
     {
         var mockLogger = new MockMsLogger();
         var logger = new TestLogger(mockLogger);
@@ -73,41 +74,41 @@ public class LoggerTests
 
         logger.Info("test info message", exception);
 
-        Assert.Single(mockLogger.LogEntries);
-        Assert.Equal(MsLogLevel.Information, mockLogger.LogEntries[0].Level);
-        Assert.Equal("test info message", mockLogger.LogEntries[0].Message);
-        Assert.Same(exception, mockLogger.LogEntries[0].Exception);
+        await Assert.That(mockLogger.LogEntries).HasSingleItem();
+        await Assert.That(mockLogger.LogEntries[0].Level).IsEqualTo(MsLogLevel.Information);
+        await Assert.That(mockLogger.LogEntries[0].Message).IsEqualTo("test info message");
+        await Assert.That(mockLogger.LogEntries[0].Exception).IsSameReferenceAs(exception);
     }
 
-    [Fact]
-    public void InfoFormat_formats_message()
+    [Test]
+    public async Task InfoFormat_formats_message()
     {
         var mockLogger = new MockMsLogger();
         var logger = new TestLogger(mockLogger);
 
         logger.InfoFormat("user {0} logged in at {1}", "alice", "10:00");
 
-        Assert.Single(mockLogger.LogEntries);
-        Assert.Equal(MsLogLevel.Information, mockLogger.LogEntries[0].Level);
-        Assert.Equal("user {0} logged in at {1}", mockLogger.LogEntries[0].Message);
-        Assert.Equal(["alice", "10:00"], mockLogger.LogEntries[0].Args);
+        await Assert.That(mockLogger.LogEntries).HasSingleItem();
+        await Assert.That(mockLogger.LogEntries[0].Level).IsEqualTo(MsLogLevel.Information);
+        await Assert.That(mockLogger.LogEntries[0].Message).IsEqualTo("user {0} logged in at {1}");
+        await Assert.That(mockLogger.LogEntries[0].Args).IsEqualTo(["alice", "10:00"]);
     }
 
-    [Fact]
-    public void Warn_logs_message_at_warning_level()
+    [Test]
+    public async Task Warn_logs_message_at_warning_level()
     {
         var mockLogger = new MockMsLogger();
         var logger = new TestLogger(mockLogger);
 
         logger.Warn("test warning message");
 
-        Assert.Single(mockLogger.LogEntries);
-        Assert.Equal(MsLogLevel.Warning, mockLogger.LogEntries[0].Level);
-        Assert.Equal("test warning message", mockLogger.LogEntries[0].Message);
+        await Assert.That(mockLogger.LogEntries).HasSingleItem();
+        await Assert.That(mockLogger.LogEntries[0].Level).IsEqualTo(MsLogLevel.Warning);
+        await Assert.That(mockLogger.LogEntries[0].Message).IsEqualTo("test warning message");
     }
 
-    [Fact]
-    public void Warn_with_exception_logs_at_warning_level()
+    [Test]
+    public async Task Warn_with_exception_logs_at_warning_level()
     {
         var mockLogger = new MockMsLogger();
         var logger = new TestLogger(mockLogger);
@@ -115,40 +116,40 @@ public class LoggerTests
 
         logger.Warn("test warning message", exception);
 
-        Assert.Single(mockLogger.LogEntries);
-        Assert.Equal(MsLogLevel.Warning, mockLogger.LogEntries[0].Level);
-        Assert.Equal("test warning message", mockLogger.LogEntries[0].Message);
-        Assert.Same(exception, mockLogger.LogEntries[0].Exception);
+        await Assert.That(mockLogger.LogEntries).HasSingleItem();
+        await Assert.That(mockLogger.LogEntries[0].Level).IsEqualTo(MsLogLevel.Warning);
+        await Assert.That(mockLogger.LogEntries[0].Message).IsEqualTo("test warning message");
+        await Assert.That(mockLogger.LogEntries[0].Exception).IsSameReferenceAs(exception);
     }
 
-    [Fact]
-    public void WarnFormat_formats_message()
+    [Test]
+    public async Task WarnFormat_formats_message()
     {
         var mockLogger = new MockMsLogger();
         var logger = new TestLogger(mockLogger);
 
         logger.WarnFormat("warning {0}", "details");
 
-        Assert.Single(mockLogger.LogEntries);
-        Assert.Equal(MsLogLevel.Warning, mockLogger.LogEntries[0].Level);
-        Assert.Equal("warning {0}", mockLogger.LogEntries[0].Message);
+        await Assert.That(mockLogger.LogEntries).HasSingleItem();
+        await Assert.That(mockLogger.LogEntries[0].Level).IsEqualTo(MsLogLevel.Warning);
+        await Assert.That(mockLogger.LogEntries[0].Message).IsEqualTo("warning {0}");
     }
 
-    [Fact]
-    public void Error_logs_message_at_error_level()
+    [Test]
+    public async Task Error_logs_message_at_error_level()
     {
         var mockLogger = new MockMsLogger();
         var logger = new TestLogger(mockLogger);
 
         logger.Error("test error message");
 
-        Assert.Single(mockLogger.LogEntries);
-        Assert.Equal(MsLogLevel.Error, mockLogger.LogEntries[0].Level);
-        Assert.Equal("test error message", mockLogger.LogEntries[0].Message);
+        await Assert.That(mockLogger.LogEntries).HasSingleItem();
+        await Assert.That(mockLogger.LogEntries[0].Level).IsEqualTo(MsLogLevel.Error);
+        await Assert.That(mockLogger.LogEntries[0].Message).IsEqualTo("test error message");
     }
 
-    [Fact]
-    public void Error_with_exception_logs_at_error_level()
+    [Test]
+    public async Task Error_with_exception_logs_at_error_level()
     {
         var mockLogger = new MockMsLogger();
         var logger = new TestLogger(mockLogger);
@@ -156,40 +157,40 @@ public class LoggerTests
 
         logger.Error("test error message", exception);
 
-        Assert.Single(mockLogger.LogEntries);
-        Assert.Equal(MsLogLevel.Error, mockLogger.LogEntries[0].Level);
-        Assert.Equal("test error message", mockLogger.LogEntries[0].Message);
-        Assert.Same(exception, mockLogger.LogEntries[0].Exception);
+        await Assert.That(mockLogger.LogEntries).HasSingleItem();
+        await Assert.That(mockLogger.LogEntries[0].Level).IsEqualTo(MsLogLevel.Error);
+        await Assert.That(mockLogger.LogEntries[0].Message).IsEqualTo("test error message");
+        await Assert.That(mockLogger.LogEntries[0].Exception).IsSameReferenceAs(exception);
     }
 
-    [Fact]
-    public void ErrorFormat_formats_message()
+    [Test]
+    public async Task ErrorFormat_formats_message()
     {
         var mockLogger = new MockMsLogger();
         var logger = new TestLogger(mockLogger);
 
         logger.ErrorFormat("error code: {0}", 500);
 
-        Assert.Single(mockLogger.LogEntries);
-        Assert.Equal(MsLogLevel.Error, mockLogger.LogEntries[0].Level);
-        Assert.Equal("error code: {0}", mockLogger.LogEntries[0].Message);
+        await Assert.That(mockLogger.LogEntries).HasSingleItem();
+        await Assert.That(mockLogger.LogEntries[0].Level).IsEqualTo(MsLogLevel.Error);
+        await Assert.That(mockLogger.LogEntries[0].Message).IsEqualTo("error code: {0}");
     }
 
-    [Fact]
-    public void Fatal_logs_message_at_critical_level()
+    [Test]
+    public async Task Fatal_logs_message_at_critical_level()
     {
         var mockLogger = new MockMsLogger();
         var logger = new TestLogger(mockLogger);
 
         logger.Fatal("test fatal message");
 
-        Assert.Single(mockLogger.LogEntries);
-        Assert.Equal(MsLogLevel.Critical, mockLogger.LogEntries[0].Level);
-        Assert.Equal("test fatal message", mockLogger.LogEntries[0].Message);
+        await Assert.That(mockLogger.LogEntries).HasSingleItem();
+        await Assert.That(mockLogger.LogEntries[0].Level).IsEqualTo(MsLogLevel.Critical);
+        await Assert.That(mockLogger.LogEntries[0].Message).IsEqualTo("test fatal message");
     }
 
-    [Fact]
-    public void Fatal_with_exception_logs_at_critical_level()
+    [Test]
+    public async Task Fatal_with_exception_logs_at_critical_level()
     {
         var mockLogger = new MockMsLogger();
         var logger = new TestLogger(mockLogger);
@@ -197,83 +198,83 @@ public class LoggerTests
 
         logger.Fatal("test fatal message", exception);
 
-        Assert.Single(mockLogger.LogEntries);
-        Assert.Equal(MsLogLevel.Critical, mockLogger.LogEntries[0].Level);
-        Assert.Equal("test fatal message", mockLogger.LogEntries[0].Message);
-        Assert.Same(exception, mockLogger.LogEntries[0].Exception);
+        await Assert.That(mockLogger.LogEntries).HasSingleItem();
+        await Assert.That(mockLogger.LogEntries[0].Level).IsEqualTo(MsLogLevel.Critical);
+        await Assert.That(mockLogger.LogEntries[0].Message).IsEqualTo("test fatal message");
+        await Assert.That(mockLogger.LogEntries[0].Exception).IsSameReferenceAs(exception);
     }
 
-    [Fact]
-    public void FatalFormat_formats_message()
+    [Test]
+    public async Task FatalFormat_formats_message()
     {
         var mockLogger = new MockMsLogger();
         var logger = new TestLogger(mockLogger);
 
         logger.FatalFormat("fatal error in {0}", "module");
 
-        Assert.Single(mockLogger.LogEntries);
-        Assert.Equal(MsLogLevel.Critical, mockLogger.LogEntries[0].Level);
-        Assert.Equal("fatal error in {0}", mockLogger.LogEntries[0].Message);
+        await Assert.That(mockLogger.LogEntries).HasSingleItem();
+        await Assert.That(mockLogger.LogEntries[0].Level).IsEqualTo(MsLogLevel.Critical);
+        await Assert.That(mockLogger.LogEntries[0].Message).IsEqualTo("fatal error in {0}");
     }
 
-    [Theory]
-    [InlineData(MsLogLevel.Debug, true)]
-    [InlineData(MsLogLevel.Information, false)]
-    [InlineData(MsLogLevel.Warning, false)]
-    public void IsDebugEnabled_returns_correct_value(MsLogLevel enabledLevel, bool expected)
+    [Test]
+    [Arguments(MsLogLevel.Debug, true)]
+    [Arguments(MsLogLevel.Information, false)]
+    [Arguments(MsLogLevel.Warning, false)]
+    public async Task IsDebugEnabled_returns_correct_value(MsLogLevel enabledLevel, bool expected)
     {
         var mockLogger = new MockMsLogger { EnabledLevel = enabledLevel };
         var logger = new TestLogger(mockLogger);
 
-        Assert.Equal(expected, logger.IsDebugEnabled);
+        await Assert.That(logger.IsDebugEnabled).IsEqualTo(expected);
     }
 
-    [Theory]
-    [InlineData(MsLogLevel.Debug, true)]
-    [InlineData(MsLogLevel.Information, true)]
-    [InlineData(MsLogLevel.Warning, false)]
-    public void IsInfoEnabled_returns_correct_value(MsLogLevel enabledLevel, bool expected)
+    [Test]
+    [Arguments(MsLogLevel.Debug, true)]
+    [Arguments(MsLogLevel.Information, true)]
+    [Arguments(MsLogLevel.Warning, false)]
+    public async Task IsInfoEnabled_returns_correct_value(MsLogLevel enabledLevel, bool expected)
     {
         var mockLogger = new MockMsLogger { EnabledLevel = enabledLevel };
         var logger = new TestLogger(mockLogger);
 
-        Assert.Equal(expected, logger.IsInfoEnabled);
+        await Assert.That(logger.IsInfoEnabled).IsEqualTo(expected);
     }
 
-    [Theory]
-    [InlineData(MsLogLevel.Debug, true)]
-    [InlineData(MsLogLevel.Warning, true)]
-    [InlineData(MsLogLevel.Error, false)]
-    public void IsWarnEnabled_returns_correct_value(MsLogLevel enabledLevel, bool expected)
+    [Test]
+    [Arguments(MsLogLevel.Debug, true)]
+    [Arguments(MsLogLevel.Warning, true)]
+    [Arguments(MsLogLevel.Error, false)]
+    public async Task IsWarnEnabled_returns_correct_value(MsLogLevel enabledLevel, bool expected)
     {
         var mockLogger = new MockMsLogger { EnabledLevel = enabledLevel };
         var logger = new TestLogger(mockLogger);
 
-        Assert.Equal(expected, logger.IsWarnEnabled);
+        await Assert.That(logger.IsWarnEnabled).IsEqualTo(expected);
     }
 
-    [Theory]
-    [InlineData(MsLogLevel.Debug, true)]
-    [InlineData(MsLogLevel.Error, true)]
-    [InlineData(MsLogLevel.Critical, false)]
-    public void IsErrorEnabled_returns_correct_value(MsLogLevel enabledLevel, bool expected)
+    [Test]
+    [Arguments(MsLogLevel.Debug, true)]
+    [Arguments(MsLogLevel.Error, true)]
+    [Arguments(MsLogLevel.Critical, false)]
+    public async Task IsErrorEnabled_returns_correct_value(MsLogLevel enabledLevel, bool expected)
     {
         var mockLogger = new MockMsLogger { EnabledLevel = enabledLevel };
         var logger = new TestLogger(mockLogger);
 
-        Assert.Equal(expected, logger.IsErrorEnabled);
+        await Assert.That(logger.IsErrorEnabled).IsEqualTo(expected);
     }
 
-    [Theory]
-    [InlineData(MsLogLevel.Debug, true)]
-    [InlineData(MsLogLevel.Critical, true)]
-    [InlineData(MsLogLevel.None, false)]
-    public void IsFatalEnabled_returns_correct_value(MsLogLevel enabledLevel, bool expected)
+    [Test]
+    [Arguments(MsLogLevel.Debug, true)]
+    [Arguments(MsLogLevel.Critical, true)]
+    [Arguments(MsLogLevel.None, false)]
+    public async Task IsFatalEnabled_returns_correct_value(MsLogLevel enabledLevel, bool expected)
     {
         var mockLogger = new MockMsLogger { EnabledLevel = enabledLevel };
         var logger = new TestLogger(mockLogger);
 
-        Assert.Equal(expected, logger.IsFatalEnabled);
+        await Assert.That(logger.IsFatalEnabled).IsEqualTo(expected);
     }
 }
 

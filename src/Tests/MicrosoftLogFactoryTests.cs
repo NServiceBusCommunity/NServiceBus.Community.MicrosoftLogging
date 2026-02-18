@@ -1,7 +1,9 @@
+using System.Threading.Tasks;
+
 public class MicrosoftLogFactoryTests
 {
-    [Fact]
-    public void UseMsFactory_sets_logger_factory()
+    [Test]
+    public async Task UseMsFactory_sets_logger_factory()
     {
         var factory = new MicrosoftLogFactory();
         var msLoggerFactory = new MockMsLoggerFactory();
@@ -10,11 +12,11 @@ public class MicrosoftLogFactoryTests
 
         // Verify by getting the logging factory (which would throw if not set)
         var loggerFactory = GetLoggingFactory(factory);
-        Assert.NotNull(loggerFactory);
+        await Assert.That(loggerFactory).IsNotNull();
     }
 
-    [Fact]
-    public void UseMsFactory_called_twice_throws_exception()
+    [Test]
+    public async Task UseMsFactory_called_twice_throws_exception()
     {
         var factory = new MicrosoftLogFactory();
         var msLoggerFactory1 = new MockMsLoggerFactory();
@@ -23,22 +25,22 @@ public class MicrosoftLogFactoryTests
         factory.UseMsFactory(msLoggerFactory1);
 
         var exception = Assert.Throws<Exception>(() => factory.UseMsFactory(msLoggerFactory2));
-        Assert.Contains("UseMsFactory", exception.Message);
-        Assert.Contains("already been called", exception.Message);
+        await Assert.That(exception.Message).Contains("UseMsFactory");
+        await Assert.That(exception.Message).Contains("already been called");
     }
 
-    [Fact]
-    public void GetLoggingFactory_throws_when_UseMsFactory_not_called()
+    [Test]
+    public async Task GetLoggingFactory_throws_when_UseMsFactory_not_called()
     {
         var factory = new MicrosoftLogFactory();
 
         var exception = Assert.Throws<Exception>(() => GetLoggingFactory(factory));
-        Assert.Contains("UseMsFactory", exception.Message);
-        Assert.Contains("prior to starting endpoint", exception.Message);
+        await Assert.That(exception.Message).Contains("UseMsFactory");
+        await Assert.That(exception.Message).Contains("prior to starting endpoint");
     }
 
-    [Fact]
-    public void GetLoggingFactory_returns_ILoggerFactory_after_UseMsFactory_called()
+    [Test]
+    public async Task GetLoggingFactory_returns_ILoggerFactory_after_UseMsFactory_called()
     {
         var factory = new MicrosoftLogFactory();
         var msLoggerFactory = new MockMsLoggerFactory();
@@ -46,12 +48,12 @@ public class MicrosoftLogFactoryTests
 
         var loggerFactory = GetLoggingFactory(factory);
 
-        Assert.NotNull(loggerFactory);
-        Assert.IsAssignableFrom<NServiceBus.Logging.ILoggerFactory>(loggerFactory);
+        await Assert.That(loggerFactory).IsNotNull();
+        await Assert.That(loggerFactory).IsAssignableTo<NServiceBus.Logging.ILoggerFactory>();
     }
 
-    [Fact]
-    public void GetLoggingFactory_returns_factory_that_creates_working_loggers()
+    [Test]
+    public async Task GetLoggingFactory_returns_factory_that_creates_working_loggers()
     {
         var factory = new MicrosoftLogFactory();
         var msLoggerFactory = new MockMsLoggerFactory();
@@ -61,8 +63,8 @@ public class MicrosoftLogFactoryTests
         var log = loggerFactory.GetLogger("TestLogger");
         log.Info("test message");
 
-        Assert.Single(msLoggerFactory.Loggers);
-        Assert.Single(msLoggerFactory.Loggers["TestLogger"].LogEntries);
+        await Assert.That(msLoggerFactory.Loggers).HasSingleItem();
+        await Assert.That(msLoggerFactory.Loggers["TestLogger"].LogEntries).HasSingleItem();
     }
 
     // Helper to invoke protected GetLoggingFactory method

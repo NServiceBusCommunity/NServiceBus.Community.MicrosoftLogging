@@ -1,4 +1,5 @@
 using NServiceBus.Logging;
+using System.Threading.Tasks;
 
 /// <summary>
 /// Tests for the NamedLogger class that queues logs for deferred processing.
@@ -6,22 +7,22 @@ using NServiceBus.Logging;
 /// </summary>
 public class NamedLoggerTests
 {
-    [Fact]
-    public void Debug_writes_message_at_debug_level()
+    [Test]
+    public async Task Debug_writes_message_at_debug_level()
     {
         var factory = new TestDeferredLoggerFactory(LogLevel.Debug);
         var logger = new TestNamedLogger("TestLogger", factory);
 
         logger.Debug("debug message");
 
-        Assert.Single(factory.DeferredLogs["TestLogger"]);
+        await Assert.That(factory.DeferredLogs["TestLogger"]).HasSingleItem();
         var (level, message) = factory.DeferredLogs["TestLogger"].First();
-        Assert.Equal(LogLevel.Debug, level);
-        Assert.Equal("debug message", message);
+        await Assert.That(level).IsEqualTo(LogLevel.Debug);
+        await Assert.That(message).IsEqualTo("debug message");
     }
 
-    [Fact]
-    public void Debug_with_exception_includes_exception_in_message()
+    [Test]
+    public async Task Debug_with_exception_includes_exception_in_message()
     {
         var factory = new TestDeferredLoggerFactory(LogLevel.Debug);
         var logger = new TestNamedLogger("TestLogger", factory);
@@ -30,12 +31,12 @@ public class NamedLoggerTests
         logger.Debug("debug message", exception);
 
         var (_, message) = factory.DeferredLogs["TestLogger"].First();
-        Assert.Contains("debug message", message);
-        Assert.Contains("test exception", message);
+        await Assert.That(message).Contains("debug message");
+        await Assert.That(message).Contains("test exception");
     }
 
-    [Fact]
-    public void DebugFormat_formats_message()
+    [Test]
+    public async Task DebugFormat_formats_message()
     {
         var factory = new TestDeferredLoggerFactory(LogLevel.Debug);
         var logger = new TestNamedLogger("TestLogger", factory);
@@ -43,11 +44,11 @@ public class NamedLoggerTests
         logger.DebugFormat("value is {0}", 42);
 
         var (_, message) = factory.DeferredLogs["TestLogger"].First();
-        Assert.Equal("value is 42", message);
+        await Assert.That(message).IsEqualTo("value is 42");
     }
 
-    [Fact]
-    public void Info_writes_message_at_info_level()
+    [Test]
+    public async Task Info_writes_message_at_info_level()
     {
         var factory = new TestDeferredLoggerFactory(LogLevel.Debug);
         var logger = new TestNamedLogger("TestLogger", factory);
@@ -55,12 +56,12 @@ public class NamedLoggerTests
         logger.Info("info message");
 
         var (level, message) = factory.DeferredLogs["TestLogger"].First();
-        Assert.Equal(LogLevel.Info, level);
-        Assert.Equal("info message", message);
+        await Assert.That(level).IsEqualTo(LogLevel.Info);
+        await Assert.That(message).IsEqualTo("info message");
     }
 
-    [Fact]
-    public void Info_with_exception_includes_exception_in_message()
+    [Test]
+    public async Task Info_with_exception_includes_exception_in_message()
     {
         var factory = new TestDeferredLoggerFactory(LogLevel.Debug);
         var logger = new TestNamedLogger("TestLogger", factory);
@@ -69,12 +70,12 @@ public class NamedLoggerTests
         logger.Info("info message", exception);
 
         var (_, message) = factory.DeferredLogs["TestLogger"].First();
-        Assert.Contains("info message", message);
-        Assert.Contains("info exception", message);
+        await Assert.That(message).Contains("info message");
+        await Assert.That(message).Contains("info exception");
     }
 
-    [Fact]
-    public void InfoFormat_formats_message()
+    [Test]
+    public async Task InfoFormat_formats_message()
     {
         var factory = new TestDeferredLoggerFactory(LogLevel.Debug);
         var logger = new TestNamedLogger("TestLogger", factory);
@@ -82,11 +83,11 @@ public class NamedLoggerTests
         logger.InfoFormat("user {0} logged in", "alice");
 
         var (_, message) = factory.DeferredLogs["TestLogger"].First();
-        Assert.Equal("user alice logged in", message);
+        await Assert.That(message).IsEqualTo("user alice logged in");
     }
 
-    [Fact]
-    public void Warn_writes_message_at_warn_level()
+    [Test]
+    public async Task Warn_writes_message_at_warn_level()
     {
         var factory = new TestDeferredLoggerFactory(LogLevel.Debug);
         var logger = new TestNamedLogger("TestLogger", factory);
@@ -94,12 +95,12 @@ public class NamedLoggerTests
         logger.Warn("warn message");
 
         var (level, message) = factory.DeferredLogs["TestLogger"].First();
-        Assert.Equal(LogLevel.Warn, level);
-        Assert.Equal("warn message", message);
+        await Assert.That(level).IsEqualTo(LogLevel.Warn);
+        await Assert.That(message).IsEqualTo("warn message");
     }
 
-    [Fact]
-    public void Warn_with_exception_includes_exception_in_message()
+    [Test]
+    public async Task Warn_with_exception_includes_exception_in_message()
     {
         var factory = new TestDeferredLoggerFactory(LogLevel.Debug);
         var logger = new TestNamedLogger("TestLogger", factory);
@@ -108,12 +109,12 @@ public class NamedLoggerTests
         logger.Warn("warn message", exception);
 
         var (_, message) = factory.DeferredLogs["TestLogger"].First();
-        Assert.Contains("warn message", message);
-        Assert.Contains("warn exception", message);
+        await Assert.That(message).Contains("warn message");
+        await Assert.That(message).Contains("warn exception");
     }
 
-    [Fact]
-    public void WarnFormat_formats_message()
+    [Test]
+    public async Task WarnFormat_formats_message()
     {
         var factory = new TestDeferredLoggerFactory(LogLevel.Debug);
         var logger = new TestNamedLogger("TestLogger", factory);
@@ -121,11 +122,11 @@ public class NamedLoggerTests
         logger.WarnFormat("warning: {0}", "issue");
 
         var (_, message) = factory.DeferredLogs["TestLogger"].First();
-        Assert.Equal("warning: issue", message);
+        await Assert.That(message).IsEqualTo("warning: issue");
     }
 
-    [Fact]
-    public void Error_writes_message_at_error_level()
+    [Test]
+    public async Task Error_writes_message_at_error_level()
     {
         var factory = new TestDeferredLoggerFactory(LogLevel.Debug);
         var logger = new TestNamedLogger("TestLogger", factory);
@@ -133,12 +134,12 @@ public class NamedLoggerTests
         logger.Error("error message");
 
         var (level, message) = factory.DeferredLogs["TestLogger"].First();
-        Assert.Equal(LogLevel.Error, level);
-        Assert.Equal("error message", message);
+        await Assert.That(level).IsEqualTo(LogLevel.Error);
+        await Assert.That(message).IsEqualTo("error message");
     }
 
-    [Fact]
-    public void Error_with_exception_includes_exception_in_message()
+    [Test]
+    public async Task Error_with_exception_includes_exception_in_message()
     {
         var factory = new TestDeferredLoggerFactory(LogLevel.Debug);
         var logger = new TestNamedLogger("TestLogger", factory);
@@ -147,12 +148,12 @@ public class NamedLoggerTests
         logger.Error("error message", exception);
 
         var (_, message) = factory.DeferredLogs["TestLogger"].First();
-        Assert.Contains("error message", message);
-        Assert.Contains("error exception", message);
+        await Assert.That(message).Contains("error message");
+        await Assert.That(message).Contains("error exception");
     }
 
-    [Fact]
-    public void ErrorFormat_formats_message()
+    [Test]
+    public async Task ErrorFormat_formats_message()
     {
         var factory = new TestDeferredLoggerFactory(LogLevel.Debug);
         var logger = new TestNamedLogger("TestLogger", factory);
@@ -160,11 +161,11 @@ public class NamedLoggerTests
         logger.ErrorFormat("error code: {0}", 500);
 
         var (_, message) = factory.DeferredLogs["TestLogger"].First();
-        Assert.Equal("error code: 500", message);
+        await Assert.That(message).IsEqualTo("error code: 500");
     }
 
-    [Fact]
-    public void Fatal_writes_message_at_fatal_level()
+    [Test]
+    public async Task Fatal_writes_message_at_fatal_level()
     {
         var factory = new TestDeferredLoggerFactory(LogLevel.Debug);
         var logger = new TestNamedLogger("TestLogger", factory);
@@ -172,12 +173,12 @@ public class NamedLoggerTests
         logger.Fatal("fatal message");
 
         var (level, message) = factory.DeferredLogs["TestLogger"].First();
-        Assert.Equal(LogLevel.Fatal, level);
-        Assert.Equal("fatal message", message);
+        await Assert.That(level).IsEqualTo(LogLevel.Fatal);
+        await Assert.That(message).IsEqualTo("fatal message");
     }
 
-    [Fact]
-    public void Fatal_with_exception_includes_exception_in_message()
+    [Test]
+    public async Task Fatal_with_exception_includes_exception_in_message()
     {
         var factory = new TestDeferredLoggerFactory(LogLevel.Debug);
         var logger = new TestNamedLogger("TestLogger", factory);
@@ -186,12 +187,12 @@ public class NamedLoggerTests
         logger.Fatal("fatal message", exception);
 
         var (_, message) = factory.DeferredLogs["TestLogger"].First();
-        Assert.Contains("fatal message", message);
-        Assert.Contains("fatal exception", message);
+        await Assert.That(message).Contains("fatal message");
+        await Assert.That(message).Contains("fatal exception");
     }
 
-    [Fact]
-    public void FatalFormat_formats_message()
+    [Test]
+    public async Task FatalFormat_formats_message()
     {
         var factory = new TestDeferredLoggerFactory(LogLevel.Debug);
         var logger = new TestNamedLogger("TestLogger", factory);
@@ -199,11 +200,11 @@ public class NamedLoggerTests
         logger.FatalFormat("fatal error in {0}", "module");
 
         var (_, message) = factory.DeferredLogs["TestLogger"].First();
-        Assert.Equal("fatal error in module", message);
+        await Assert.That(message).IsEqualTo("fatal error in module");
     }
 
-    [Fact]
-    public void Multiple_logs_preserve_order()
+    [Test]
+    public async Task Multiple_logs_preserve_order()
     {
         var factory = new TestDeferredLoggerFactory(LogLevel.Debug);
         var logger = new TestNamedLogger("TestLogger", factory);
@@ -213,57 +214,57 @@ public class NamedLoggerTests
         logger.Info("third");
 
         var logs = factory.DeferredLogs["TestLogger"].ToList();
-        Assert.Equal(3, logs.Count);
-        Assert.Equal("first", logs[0].message);
-        Assert.Equal("second", logs[1].message);
-        Assert.Equal("third", logs[2].message);
+        await Assert.That(logs.Count).IsEqualTo(3);
+        await Assert.That(logs[0].message).IsEqualTo("first");
+        await Assert.That(logs[1].message).IsEqualTo("second");
+        await Assert.That(logs[2].message).IsEqualTo("third");
     }
 
-    [Fact]
-    public void IsDebugEnabled_can_be_set()
+    [Test]
+    public async Task IsDebugEnabled_can_be_set()
     {
         var factory = new TestDeferredLoggerFactory(LogLevel.Debug);
         var logger = new TestNamedLogger("TestLogger", factory) { IsDebugEnabled = true };
 
-        Assert.True(logger.IsDebugEnabled);
+        await Assert.That(logger.IsDebugEnabled).IsTrue();
 
         logger.IsDebugEnabled = false;
-        Assert.False(logger.IsDebugEnabled);
+        await Assert.That(logger.IsDebugEnabled).IsFalse();
     }
 
-    [Fact]
-    public void IsInfoEnabled_can_be_set()
+    [Test]
+    public async Task IsInfoEnabled_can_be_set()
     {
         var factory = new TestDeferredLoggerFactory(LogLevel.Debug);
         var logger = new TestNamedLogger("TestLogger", factory) { IsInfoEnabled = true };
 
-        Assert.True(logger.IsInfoEnabled);
+        await Assert.That(logger.IsInfoEnabled).IsTrue();
     }
 
-    [Fact]
-    public void IsWarnEnabled_can_be_set()
+    [Test]
+    public async Task IsWarnEnabled_can_be_set()
     {
         var factory = new TestDeferredLoggerFactory(LogLevel.Debug);
         var logger = new TestNamedLogger("TestLogger", factory) { IsWarnEnabled = true };
 
-        Assert.True(logger.IsWarnEnabled);
+        await Assert.That(logger.IsWarnEnabled).IsTrue();
     }
 
-    [Fact]
-    public void IsErrorEnabled_can_be_set()
+    [Test]
+    public async Task IsErrorEnabled_can_be_set()
     {
         var factory = new TestDeferredLoggerFactory(LogLevel.Debug);
         var logger = new TestNamedLogger("TestLogger", factory) { IsErrorEnabled = true };
 
-        Assert.True(logger.IsErrorEnabled);
+        await Assert.That(logger.IsErrorEnabled).IsTrue();
     }
 
-    [Fact]
-    public void IsFatalEnabled_can_be_set()
+    [Test]
+    public async Task IsFatalEnabled_can_be_set()
     {
         var factory = new TestDeferredLoggerFactory(LogLevel.Debug);
         var logger = new TestNamedLogger("TestLogger", factory) { IsFatalEnabled = true };
 
-        Assert.True(logger.IsFatalEnabled);
+        await Assert.That(logger.IsFatalEnabled).IsTrue();
     }
 }
