@@ -54,7 +54,10 @@ class MockMsLoggerFactory : MsILoggerFactory
     {
         if (!Loggers.TryGetValue(categoryName, out var logger))
         {
-            logger = new MockMsLogger { EnabledLevel = DefaultEnabledLevel };
+            logger = new()
+            {
+                EnabledLevel = DefaultEnabledLevel
+            };
             Loggers[categoryName] = logger;
         }
         return logger;

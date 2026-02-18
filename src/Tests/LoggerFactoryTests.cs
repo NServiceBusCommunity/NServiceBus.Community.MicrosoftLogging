@@ -1,5 +1,4 @@
 using NServiceBus.Logging;
-using System.Threading.Tasks;
 
 /// <summary>
 /// Tests for the LoggerFactory class through the public MicrosoftLogFactory API.

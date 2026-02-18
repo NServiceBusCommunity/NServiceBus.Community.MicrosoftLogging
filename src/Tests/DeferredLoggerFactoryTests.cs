@@ -1,5 +1,4 @@
 using NServiceBus.Logging;
-using System.Threading.Tasks;
 
 /// <summary>
 /// Tests for the DeferredLoggerFactory pattern using a local test implementation.
@@ -154,7 +153,7 @@ class TestDeferredLoggerFactory(LogLevel level) :
         {
             return;
         }
-        var logQueue = DeferredLogs.GetOrAdd(name, _ => new ConcurrentQueue<(LogLevel level, string message)>());
+        var logQueue = DeferredLogs.GetOrAdd(name, _ => new());
         logQueue.Enqueue((messageLevel, message));
     }
 }

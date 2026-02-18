@@ -2,7 +2,6 @@
 using Microsoft.Extensions.Hosting;
 using NServiceBus.Logging;
 using Microsoft.Extensions.Logging;
-using System.Threading.Tasks;
 
 public class IntegrationTests
 {
@@ -18,17 +17,16 @@ public class IntegrationTests
         var configuration = new EndpointConfiguration("Tests");
         configuration.UseTransport<LearningTransport>();
         configuration.UseSerialization<SystemJsonSerializer>();
-        var cancel = TestContext.Current.CancellationToken;
-        var endpoint = await Endpoint.Start(configuration, cancel);
+        var endpoint = await Endpoint.Start(configuration);
 
         var message = new MyMessage
         {
             DateSend = DateTime.Now,
         };
-        await endpoint.SendLocal(message, cancellationToken: cancel);
-        await Task.Delay(500, cancel);
+        await endpoint.SendLocal(message);
+        await Task.Delay(500);
         await Assert.That(LogMessageCapture.LoggingEvents).IsNotEmpty();
-        await endpoint.Stop(cancel);
+        await endpoint.Stop();
     }
 
     [Test]

@@ -1,5 +1,4 @@
 using NServiceBus.Logging;
-using System.Threading.Tasks;
 
 /// <summary>
 /// Tests for the NamedLogger class that queues logs for deferred processing.

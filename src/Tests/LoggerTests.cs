@@ -1,7 +1,6 @@
 using Microsoft.Extensions.Logging;
 using NServiceBus.Logging;
 using MsLogLevel = Microsoft.Extensions.Logging.LogLevel;
-using System.Threading.Tasks;
 
 /// <summary>
 /// Tests for the Logger class that wraps Microsoft.Extensions.Logging.ILogger.
