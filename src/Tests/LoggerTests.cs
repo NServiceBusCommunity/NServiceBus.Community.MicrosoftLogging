@@ -48,7 +48,7 @@ public class LoggerTests
         await Assert.That(mockLogger.LogEntries).HasSingleItem();
         await Assert.That(mockLogger.LogEntries[0].Level).IsEqualTo(MsLogLevel.Debug);
         await Assert.That(mockLogger.LogEntries[0].Message).IsEqualTo("value is {0}");
-        await Assert.That(mockLogger.LogEntries[0].Args).IsEqualTo([42]);
+        await Assert.That(mockLogger.LogEntries[0].Args).IsEquivalentTo(new object[] { 42 });
     }
 
     [Test]
@@ -90,7 +90,7 @@ public class LoggerTests
         await Assert.That(mockLogger.LogEntries).HasSingleItem();
         await Assert.That(mockLogger.LogEntries[0].Level).IsEqualTo(MsLogLevel.Information);
         await Assert.That(mockLogger.LogEntries[0].Message).IsEqualTo("user {0} logged in at {1}");
-        await Assert.That(mockLogger.LogEntries[0].Args).IsEqualTo(["alice", "10:00"]);
+        await Assert.That(mockLogger.LogEntries[0].Args).IsEquivalentTo(new object[] { "alice", "10:00" });
     }
 
     [Test]
