@@ -10,10 +10,10 @@
     <PackageVersion Include="Microsoft.Extensions.Logging" Version="10.0.5" />
     <PackageVersion Include="Microsoft.Extensions.Logging.Abstractions" Version="10.0.5" />
     <PackageVersion Include="Microsoft.Extensions.Logging.Console" Version="10.0.5" />
-    <PackageVersion Include="NServiceBus" Version="10.1.0" />
+    <PackageVersion Include="NServiceBus" Version="10.1.1" />
     <PackageVersion Include="NServiceBus.Extensions.Hosting" Version="4.0.0" />
     <PackageVersion Include="ProjectDefaults" Version="1.0.172" />
     <PackageVersion Include="System.ServiceProcess.ServiceController" Version="10.0.5" />
-    <PackageVersion Include="TUnit" Version="1.24.18" />
+    <PackageVersion Include="TUnit" Version="1.29.0" />
   </ItemGroup>
 </Project>
