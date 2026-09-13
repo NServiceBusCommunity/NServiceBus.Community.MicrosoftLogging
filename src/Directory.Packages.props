@@ -12,8 +12,8 @@
     <PackageVersion Include="Microsoft.Extensions.Logging.Console" Version="10.0.12" />
     <PackageVersion Include="NServiceBus" Version="10.2.9" />
     <PackageVersion Include="NServiceBus.Extensions.Hosting" Version="4.1.0" />
-    <PackageVersion Include="ProjectDefaults" Version="1.0.180" />
+    <PackageVersion Include="ProjectDefaults" Version="1.0.181" />
     <PackageVersion Include="System.ServiceProcess.ServiceController" Version="10.0.12" />
-    <PackageVersion Include="TUnit" Version="1.66.27" />
+    <PackageVersion Include="TUnit" Version="1.67.0" />
   </ItemGroup>
 </Project>
