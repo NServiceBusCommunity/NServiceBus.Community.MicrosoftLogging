@@ -1,6 +1,6 @@
 # <img src="/src/icon.png" height="30px"> NServiceBus.Community.MicrosoftLogging
 
-[![Build status](https://img.shields.io/appveyor/build/SimonCropp/nservicebus-community-MicrosoftLogging)](https://ci.appveyor.com/project/SimonCropp/nservicebus-community-MicrosoftLogging)
+[![Build status](https://github.com/NServiceBusCommunity/NServiceBus.Community.MicrosoftLogging/actions/workflows/build.yml/badge.svg)](https://github.com/NServiceBusCommunity/NServiceBus.Community.MicrosoftLogging/actions/workflows/build.yml)
 [![NuGet Status](https://img.shields.io/nuget/v/NServiceBus.Community.MicrosoftLogging.svg)](https://www.nuget.org/packages/NServiceBus.Community.MicrosoftLogging/)
 
 Add support for [NServiceBus](https://particular.net/nservicebus) to log to [Microsoft.Extensions.Logging](https://github.com/aspnet/Logging).
