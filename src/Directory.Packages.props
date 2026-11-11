@@ -14,6 +14,6 @@
     <PackageVersion Include="NServiceBus.Extensions.Hosting" Version="4.1.0" />
     <PackageVersion Include="ProjectDefaults" Version="1.0.188" />
     <PackageVersion Include="System.ServiceProcess.ServiceController" Version="10.0.14" />
-    <PackageVersion Include="TUnit" Version="1.81.16" />
+    <PackageVersion Include="TUnit" Version="1.83.0" />
   </ItemGroup>
 </Project>
